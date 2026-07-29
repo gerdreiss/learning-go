@@ -26,6 +26,15 @@ func (d deck) saveToFile(filename string) error {
 	return os.WriteFile(filename, []byte(strings.Join(d, "\n")), 0666)
 }
 
+func newDeckFromFile(filename string) deck {
+	bytes, err := os.ReadFile(filename)
+	if err != nil {
+		fmt.Println("Error: ", err)
+		os.Exit(1)
+	}
+	return strings.Split(string(bytes), "\n")
+}
+
 func newDeck() deck {
 	suits := []string{"Spades", "Hearts", "Diamonds", "Clubs"}
 	ranks := []string{"Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"}

@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"slices"
 )
 
 func clearScreen() {
@@ -26,8 +27,16 @@ func clearScreen() {
 func main() {
 	clearScreen()
 
+	filename := "deck.txt"
+
 	deck := newDeck()
-	deck.saveToFile("deck.txt")
+	deck.saveToFile(filename)
+	read := newDeckFromFile(filename)
+
+	if !slices.Equal(deck, read) {
+		fmt.Println("something went wrong when reading the deck from ", filename, ": deck =", deck, "read =", read)
+		os.Exit(1)
+	}
 
 	hand, rest := dealHand(deck, 5)
 	fmt.Println("\nDealt hand:")
