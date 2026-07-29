@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"os"
+	"strings"
 )
 
 type deck []string
@@ -20,9 +22,13 @@ func (h hand) print() {
 	}
 }
 
-func generateDeck() deck {
+func (d deck) saveToFile(filename string) error {
+	return os.WriteFile(filename, []byte(strings.Join(d, "\n")), 0666)
+}
+
+func newDeck() deck {
 	suits := []string{"Spades", "Hearts", "Diamonds", "Clubs"}
-	ranks := []string{"Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"}
+	ranks := []string{"Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"}
 
 	deck := make(deck, 0, 52)
 	for _, suit := range suits {
@@ -33,7 +39,14 @@ func generateDeck() deck {
 	return deck
 }
 
-func selectRandomHand(d deck, count int) hand {
+func dealHand(d deck, size int) (hand, deck) {
+	shuffled := shuffleDeck(d)
+
+	// Return the first 'size' cards and the rest
+	return shuffled[:size], shuffled[size:]
+}
+
+func shuffleDeck(d deck) []string {
 	// Create a copy of the deck to avoid modifying the original
 	shuffled := make([]string, len(d))
 	copy(shuffled, d)
@@ -43,6 +56,5 @@ func selectRandomHand(d deck, count int) hand {
 		shuffled[i], shuffled[j] = shuffled[j], shuffled[i]
 	})
 
-	// Return the first 'count' cards
-	return shuffled[:count]
+	return shuffled
 }

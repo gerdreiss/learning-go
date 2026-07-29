@@ -26,17 +26,12 @@ func clearScreen() {
 func main() {
 	clearScreen()
 
-	fmt.Println("==================================================")
+	deck := newDeck()
+	deck.saveToFile("deck.txt")
 
-	deck := generateDeck()
-	fmt.Println("The full deck of cards:")
-	deck.print()
-
-	fmt.Println("==================================================")
-
-	hand := selectRandomHand(deck, 3)
-	fmt.Println("Randomly selected hand:")
-	for i, card := range hand {
-		fmt.Println(i, card)
-	}
+	hand, rest := dealHand(deck, 5)
+	fmt.Println("\nDealt hand:")
+	hand.print()
+	fmt.Println("\nRest of the deck:")
+	rest.print()
 }
