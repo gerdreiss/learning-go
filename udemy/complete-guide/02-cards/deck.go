@@ -11,25 +11,32 @@ type deck []string
 type hand []string
 
 func newDeck() deck {
-	suits := []string{"Spades", "Hearts", "Diamonds", "Clubs"}
-	ranks := []string{"Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"}
+	suits := []string{"♠", "♥", "♦", "♣"}
+	ranks := []string{"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"}
 
-	deck := make(deck, 0, 52)
+	deck := make(deck, 0, len(suits)*len(ranks))
 	for _, suit := range suits {
 		for _, rank := range ranks {
-			deck = append(deck, rank+" of "+suit)
+			deck = append(deck, rank+suit)
 		}
 	}
 	return deck
 }
 
-func newDeckFromFile(filename string) deck {
+// newDeckFromFile reads a deck from a file
+func newDeckFromFile(filename string) (deck, error) {
 	bytes, err := os.ReadFile(filename)
 	if err != nil {
-		fmt.Println("Error: ", err)
-		os.Exit(1)
+		return nil, fmt.Errorf("failed to read file %s: %w", filename, err)
 	}
-	return strings.Split(string(bytes), "\n")
+
+	// Handle empty or whitespace-only files
+	content := strings.TrimSpace(string(bytes))
+	if content == "" {
+		return nil, fmt.Errorf("file %s is empty", filename)
+	}
+
+	return strings.Split(content, "\n"), nil
 }
 
 func shuffleDeck(d deck) []string {
@@ -45,9 +52,10 @@ func shuffleDeck(d deck) []string {
 	return shuffled
 }
 
+// print displays all cards in the deck
 func (d deck) print() {
 	for i, card := range d {
-		fmt.Println(i, card)
+		fmt.Printf("%3d: %s\n", i, card)
 	}
 }
 
@@ -57,8 +65,12 @@ func (h hand) print() {
 	}
 }
 
+// saveToFile writes the deck to a file
 func (d deck) saveToFile(filename string) error {
-	return os.WriteFile(filename, []byte(strings.Join(d, "\n")), 0666)
+	if len(d) == 0 {
+		return fmt.Errorf("cannot save empty deck")
+	}
+	return os.WriteFile(filename, []byte(strings.Join(d, "\n")), 0644)
 }
 
 func (d deck) dealHand(size int) (hand, deck) {

@@ -12,8 +12,8 @@ func TestNewDeck(t *testing.T) {
 	if dl != 52 {
 		t.Errorf("Expected deck length of 52, but got %v", dl)
 	}
-	if d[0] != "Ace of Spades" {
-		t.Errorf("Expected first card to be Ace of Spades, but got %v", d[0])
+	if d[0] != "A♠" {
+		t.Errorf("Expected first card to be A♠, but got %v", d[0])
 	}
 }
 
@@ -38,7 +38,7 @@ func TestSaveToFileAndNewDeckFromFile(t *testing.T) {
 	filename := "test.deck"
 	d1 := newDeck()
 	d1.saveToFile(filename)
-	d2 := newDeckFromFile(filename)
+	d2, _ := newDeckFromFile(filename)
 	if !slices.Equal(d1, d2) {
 		t.Errorf("Expected that the new and the read from file decks are equal, but they are not:\n%v\n%v", d1, d2)
 	}

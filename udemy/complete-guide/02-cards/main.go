@@ -31,13 +31,16 @@ func main() {
 
 	deck := newDeck()
 	deck.saveToFile(filename)
-	read := newDeckFromFile(filename)
-	os.Remove(filename)
-
+	read, err := newDeckFromFile(filename)
+	if err != nil {
+		fmt.Println("something went wrong when reading the deck from ", filename, ": deck =", deck, "read =", read)
+		os.Exit(1)
+	}
 	if !slices.Equal(deck, read) {
 		fmt.Println("something went wrong when reading the deck from ", filename, ": deck =", deck, "read =", read)
 		os.Exit(1)
 	}
+	os.Remove(filename)
 
 	hand, _ := deck.dealHand(5)
 	fmt.Println("\nDealt hand:")
