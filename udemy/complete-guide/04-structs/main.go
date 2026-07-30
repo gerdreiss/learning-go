@@ -34,4 +34,7 @@ func main() {
 	bond.updateFirstName("John")
 	bond.contactInfo.email = "john@bond.co.uk"
 	bond.print()
+
+	name := "Bill"
+	fmt.Println(&name)
 }
