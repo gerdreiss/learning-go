@@ -49,10 +49,12 @@ func newDeck() deck {
 }
 
 func dealHand(d deck, size int) (hand, deck) {
-	shuffled := shuffleDeck(d)
+	// shuffled := shuffleDeck(d)
+
+	d.shuffle()
 
 	// Return the first 'size' cards and the rest
-	return shuffled[:size], shuffled[size:]
+	return hand(d[:size]), d[size:]
 }
 
 func shuffleDeck(d deck) []string {
@@ -66,4 +68,11 @@ func shuffleDeck(d deck) []string {
 	})
 
 	return shuffled
+}
+
+func (d deck) shuffle() {
+	for i := range d {
+		newPos := rand.Intn(len(d) - 1)
+		d[i], d[newPos] = d[newPos], d[i]
+	}
 }

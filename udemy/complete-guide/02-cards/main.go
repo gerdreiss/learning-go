@@ -38,9 +38,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	hand, rest := dealHand(deck, 5)
+	hand, _ := dealHand(deck, 5)
 	fmt.Println("\nDealt hand:")
 	hand.print()
-	fmt.Println("\nRest of the deck:")
-	rest.print()
 }
