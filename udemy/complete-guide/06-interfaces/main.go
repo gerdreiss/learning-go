@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 type bot interface {
 	getGreeting() string
@@ -23,8 +26,19 @@ func main() {
 
 	printGreeting(eb)
 	printGreeting(sb)
+
+	person := Person{
+		"John",
+		"Doe",
+		time.Date(1990, time.June, 15, 0, 0, 0, 0, time.UTC),
+	}
+	printFullNameAndAge(person, person)
 }
 
 func printGreeting(b bot) {
 	fmt.Println(b.getGreeting())
+}
+
+func printFullNameAndAge(fullName FullName, age Age) {
+	fmt.Println(fullName.getFullName(), age.getAge())
 }
