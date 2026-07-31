@@ -32,13 +32,13 @@ func main() {
 		"Doe",
 		time.Date(1990, time.June, 15, 0, 0, 0, 0, time.UTC),
 	}
-	printFullNameAndAge(person, person)
+	printFullNameAndAge(person)
 }
 
 func printGreeting(b bot) {
 	fmt.Println(b.getGreeting())
 }
 
-func printFullNameAndAge(fullName FullName, age Age) {
-	fmt.Println(fullName.getFullName(), age.getAge())
+func printFullNameAndAge(info PersonInfo) {
+	fmt.Println(info.getFullName(), info.getAge())
 }

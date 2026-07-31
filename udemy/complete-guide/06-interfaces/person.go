@@ -11,11 +11,8 @@ type Person struct {
 	birthdate time.Time
 }
 
-type Age interface {
+type PersonInfo interface {
 	getAge() int
-}
-
-type FullName interface {
 	getFullName() string
 }
 
