@@ -5,21 +5,6 @@ import (
 	"time"
 )
 
-type bot interface {
-	getGreeting() string
-}
-
-type englishBot struct{}
-type spanishBot struct{}
-
-func (englishBot) getGreeting() string {
-	return "Hi there!"
-}
-
-func (spanishBot) getGreeting() string {
-	return "Hola!"
-}
-
 func main() {
 	eb := englishBot{}
 	sb := spanishBot{}
@@ -32,7 +17,14 @@ func main() {
 		"Doe",
 		time.Date(1990, time.June, 15, 0, 0, 0, 0, time.UTC),
 	}
+
 	printFullNameAndAge(person)
+
+	sum := Sum(map[string]float64{
+		"first":  35.98,
+		"second": 26,
+	})
+	fmt.Println(sum)
 }
 
 func printGreeting(b bot) {
