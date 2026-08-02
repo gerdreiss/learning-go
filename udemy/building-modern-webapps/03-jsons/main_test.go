@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"testing"
+	"testing/quick"
+)
 
 var tests = []struct {
 	name     string
@@ -28,6 +31,23 @@ func TestDivision(t *testing.T) {
 		if got != tt.expected {
 			t.Errorf("Expected %f but got %f", tt.expected, got)
 		}
+	}
+}
+
+func TestDivisionProperty(t *testing.T) {
+	property := func(a, b float32) bool {
+		if b == 0.0 {
+			res, err := divide(a, b)
+			return res == 0.0 && err != nil
+		}
+		res, err := divide(a, b)
+		return res == a/b && err == nil
+	}
+
+	// quick.Check runs the property with many random inputs
+	// The 'nil' config uses defaults (100 iterations by default)
+	if err := quick.Check(property, nil); err != nil {
+		t.Error(err)
 	}
 }
 
