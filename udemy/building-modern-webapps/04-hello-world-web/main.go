@@ -6,6 +6,8 @@ import (
 	"net/http"
 )
 
+const addr = ":8080"
+
 func Home(w http.ResponseWriter, r *http.Request) {
 	n, err := fmt.Fprintf(w, "Hello, world!")
 	if err != nil {
@@ -33,7 +35,8 @@ func main() {
 	http.HandleFunc("/", Home)
 	http.HandleFunc("/about", About)
 
-	err := http.ListenAndServe(":8080", nil)
+	fmt.Printf("Starting server on port %s...\n", addr)
+	err := http.ListenAndServe(addr, nil)
 	if err != nil {
 		fmt.Println("WTF!", err)
 	}
