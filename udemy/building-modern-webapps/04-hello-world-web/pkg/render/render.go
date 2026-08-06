@@ -7,22 +7,34 @@ import (
 	"net/http"
 	"path/filepath"
 	"text/template"
+
+	"github.com/gerdreiss/go-course/pkg/config"
 )
+
+var app *config.AppConfig
+
+// NewTemplates sets the config for the render package
+func NewTemplates(a *config.AppConfig) {
+	app = a
+}
 
 // RenderTemplate renders a template
 func RenderTemplate(w http.ResponseWriter, tmpl string) {
-	tc, err := createTemplateCache()
-	if err != nil {
-		log.Fatal("error creating template cache: ", err)
+	var tc map[string]*template.Template
+
+	if app.UseCache {
+		tc = app.TemplateCache
+	} else {
+		tc, _ = CreateTemplateCache()
 	}
 
 	t, ok := tc[tmpl]
 	if !ok {
-		log.Fatal("no template for ", tmpl)
+		log.Fatal("no template for ", tmpl, " in template cache")
 	}
 
 	buf := new(bytes.Buffer)
-	err = t.Execute(buf, nil)
+	err := t.Execute(buf, nil)
 	if err != nil {
 		log.Println(err)
 	}
@@ -33,7 +45,7 @@ func RenderTemplate(w http.ResponseWriter, tmpl string) {
 	}
 }
 
-func createTemplateCache() (map[string]*template.Template, error) {
+func CreateTemplateCache() (map[string]*template.Template, error) {
 	tc := map[string]*template.Template{}
 
 	pages, err := filepath.Glob("./templates/*.page.tmpl")
