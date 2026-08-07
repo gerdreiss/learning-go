@@ -4,25 +4,35 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
+	"github.com/alexedwards/scs/v2"
 	"github.com/gerdreiss/go-course/pkg/config"
 	"github.com/gerdreiss/go-course/pkg/handlers"
 	"github.com/gerdreiss/go-course/pkg/render"
 )
 
-const addr = ":8080"
-
 func main() {
+
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("cannot create template cache: ", err)
 	}
 
-	app := config.AppConfig{
+	app = config.AppConfig{
+		InProduction:  false,
 		UseCache:      false,
 		TemplateCache: tc,
 		InfoLog:       log.Default(),
 	}
+
+	session = scs.New()
+	session.Lifetime = 24 * time.Hour
+	session.Cookie.Persist = !app.InProduction
+	session.Cookie.SameSite = http.SameSiteLaxMode
+	session.Cookie.Secure = app.InProduction
+
+	app.Session = session
 
 	render.NewTemplates(&app)
 	repo := handlers.NewRepo(&app)
