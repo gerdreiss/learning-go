@@ -6,3 +6,5 @@
 * [Go: The Complete Developer's Guide (Golang)](https://www.udemy.com/course/go-the-complete-developers-guide/)
 * [Building Modern Web Applications with Go (Golang)](https://www.udemy.com/course/building-modern-web-applications-with-go)
 * [Cogent Core UI](https://cogentcore.org)
+* [Ivan Penchev](https://penchev.com)
+  * [System Monitor TUI](https://penchev.com/posts/create-tui-with-go/)
